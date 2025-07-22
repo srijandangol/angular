@@ -145,3 +145,88 @@ console.log(reduces)
 //reverse the array in-place
 const reverse = num1.reverse();
 console.log(reverse)
+
+//shift()
+//removes and returs the first element
+const arrshift = [1,2,3,4,5]
+console.log("array shift: " + arrshift.shift());
+console.log("array after shift: " + arrshift)
+
+//unshift
+//add elements to the start of the array
+const arrUnshift = [1,2,3,4,5]
+console.log( arrUnshift.unshift(6));
+console.log("array after unshift: " + arrUnshift)
+
+//toLocalString(O)
+// converrts a number, date or array into a localized string representationbased on the user's locale and oprional formatting options
+
+//number
+const number1 = 1234567.89;
+
+console.log(number1.toLocaleString());           // e.g., "1,234,567.89" in en-US
+console.log(number1.toLocaleString("de-DE"));    // "1.234.567,89" in German format
+console.log(number1.toLocaleString("hi-IN"));    // "12,34,567.89" in Indian format
+
+//with options
+console.log(number1.toLocaleString("en-US", {
+  style: "currency",
+  currency: "USD"
+})); // "$9,876,543.21"
+
+console.log(number1.toLocaleString("ja-JP", {
+  style: "currency",
+  currency: "JPY"
+})); // "￥9,876,543"
+
+//Dates
+const date = new Date();
+console.log(date.toLocaleString());
+console.log(date.toLocaleString("ko-KR"));
+console.log(date.toLocaleString("hi-IN"));
+
+//with array
+const arr5 = [1,2,3,4,5]
+console.log(arr5.toLocaleString())
+
+/**
+ * | Type   | Purpose                          | Example Output (en-US)  |
+| ------ | -------------------------------- | ----------------------- |
+| Number | Localized number or currency     | `1,234.56`, `$1,234.56` |
+| Date   | Localized date/time              | `7/21/2025, 3:15:30 PM` |
+| Array  | Comma-separated localized string | `"1,2,3,4,5"` |
+
+ */
+
+//values()
+const item = ["a","b","c"]
+for (const val of item.values()){
+    console.log(val);
+}
+
+/**
+ * | Method             | Description                           |
+| ------------------ | ------------------------------------- |
+| `concat()`         | Combines arrays                       |
+| `copyWithin()`     | Copies part of array within itself    |
+| `slice()`          | Extracts a sub-array                  |
+| `entries()`        | Iterator of \[index, value]           |
+| `every()`          | Checks if all elements pass test      |
+| `fill()`           | Fills array with static value         |
+| `filter()`         | Filters based on condition            |
+| `find()`           | Finds first match                     |
+| `findIndex()`      | Finds index of first match            |
+| `forEach()`        | Iterates and executes callback        |
+| `join()`           | Joins elements into a string          |
+| `keys()`           | Returns keys (indexes)                |
+| `map()`            | Creates new array with function       |
+| `pop()`            | Removes last item                     |
+| `push()`           | Adds item to end                      |
+| `reduce()`         | Reduces array to single value         |
+| `reverse()`        | Reverses array                        |
+| `shift()`          | Removes first element                 |
+| `unshift()`        | Adds element to beginning             |
+| `toLocaleString()` | Localized string of number/date/array |
+| `values()`         | Iterator of values                    |
+
+ */
