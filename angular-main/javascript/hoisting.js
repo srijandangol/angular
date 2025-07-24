@@ -11,5 +11,5 @@ var a = 5 //The declaration var a is hoisted to the top, but a is initialized wi
 /**Function declarations are hoisted with both their name and the function body. This means the function can be called before its definition in the code. */
 greet();
 function greet(){
-    console.log("Hello")
+    console.log("Hello")//The function declaration is hoisted, and the entire function definition is available before its position in the code.
 }
