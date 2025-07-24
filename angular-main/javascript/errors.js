@@ -31,7 +31,8 @@ try{
     console.log('Fisnished attemping')
 }
 
-/**| Keyword   | Purpose                                |
+/**
+| Keyword   | Purpose                                |
 | --------- | -------------------------------------- |
 | `throw`   | Triggers a manual error                |
 | `try`     | Defines a block to run that might fail |
