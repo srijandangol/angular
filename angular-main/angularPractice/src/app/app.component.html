@@ -1,0 +1,72 @@
+<!-- hello {{ title | lowercase }}
+//pipes
+<div>
+  <p>Today is {{today}}</p>
+  <p>Today is {{today | date}}</p>
+  <p>Today is {{today | date : "fullDate"}}</p>
+  <p>Today is {{today | date : "h:mm:ss"}}</p>
+</div>
+
+<div>
+  <p>{{currency | currency}}</p>
+  <p>{{currency | currency : "EUR": "symbol": "1.1-3"}}</p>
+</div>
+
+<p>{{currency | percent }}</p>
+
+
+<h1>{{title | append: "Custom"}}</h1>
+
+
+{{message}} -->
+
+<!-- <button type="button" [disabled] = "isDisabled">{{ myBtn }}</button>
+
+<img alt="angular" width="100" height="100" [src]="angularImage"/>
+
+<div [style.backgroundColor]="bgColor">
+  <h2 [style.color]="titleColor">Title</h2>
+    <p [style]="description">Descripton</p>
+  
+</div>
+
+<h2 [class.textColor]="redText=='yes'">Title</h2>
+
+<button (click) = "incrementCount()"> Increase </button>
+<p>Counter: {{counter}}</p>
+
+<input [(ngModel)]="inputText" placeholder="Enter Text">
+<p>you entered {{ inputText }}</p>
+
+<div [ngClass] = "classes">{{message}}</div>
+
+<div class="color-box" [ngStyle]="{'backgound-color': selectedColor}">
+  Box
+</div>
+
+<div *ngIf="isLoggedIn">Welcome, {{username}}</div>
+<div  *ngIf="isLoggedIn">please login to view the content</div>
+
+<div  *ngIf="isLoggedIn; else loggedOut">view the content</div>
+<ng-template #loggedOut>please login</ng-template>  -->
+
+<!-- 
+<h1>Posts</h1>
+<div *ngFor="let post of posts">
+  <h3>{{ post.title }}</h3>
+  <p>{{ post.body }}</p>
+</div> -->
+
+<h1 style="text-align: center;">Counter</h1>
+
+<div class="incdrc">
+  <h2 class="counter">{{count}}</h2>
+
+  <div class="button-group">
+    <button (click)="handleCount('minus')" class="btn">Decrement</button>
+    <button (click)="handleCount('reset')" class="btn">Reset</button>
+    <button (click)="handleCount('plus')" class="btn">Increment</button>
+  </div>
+</div>
+
+<app-profile></app-profile>

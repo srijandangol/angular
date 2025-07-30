@@ -17,3 +17,30 @@ const person: Person = {
 }
 
 console.log(person.name)
+
+const person1: Person ={
+    name: 'sam sam',
+    age: 33,
+    address: {
+        city: "aud",
+        country: 'india'
+    }
+}
+console.log(person1.name, person1.address.country, person1.age)
+
+
+type Product ={
+    name: string,
+    price: number,
+    quantity: number
+}
+
+const product: Product = {
+    name: 'smartphone',
+    price: 16000,
+    quantity: 2
+}
+const calculatePrice = (product: Product) => {
+    return `total cost of ${product.name} = ${product.price * product.quantity} `
+}
+console.log(calculatePrice(product))
