@@ -28,18 +28,31 @@
 
       <!-- Navigation Links -->
       <nav class="flex items-center space-x-6">
-        <a
-          routerLink="/login"
-          class="text-gray-700 hover:text-blue-600 font-medium transition-colors"
-        >
-          Login
-        </a>
-        <a
-          routerLink="/signup"
-          class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 font-medium transition-colors"
-        >
-          Sign Up
-        </a>
+        <!-- Show when NOT logged in -->
+        <ng-container *ngIf="!isLoggedIn">
+          <a
+            routerLink="/login"
+            class="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+          >
+            Login
+          </a>
+          <a
+            routerLink="/signup"
+            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 font-medium transition-colors"
+          >
+            Sign Up
+          </a>
+        </ng-container>
+
+        <!-- Show when logged in -->
+        <ng-container *ngIf="isLoggedIn">
+          <button
+            (click)="onLogout()"
+            class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 font-medium transition-colors"
+          >
+            Logout
+          </button>
+        </ng-container>
       </nav>
     </div>
   </div>

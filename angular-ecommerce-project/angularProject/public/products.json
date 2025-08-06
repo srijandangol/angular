@@ -1,0 +1,98 @@
+[
+  {
+    "id": 1,
+    "name": "Men's Denim Jacket",
+    "description": "Classic fit denim jacket made from durable cotton fabric.",
+    "category": "fashion or wears",
+    "price": 59.99,
+    "brand": "Levi's"
+  },
+  {
+    "id": 2,
+    "name": "Women's Running Shoes",
+    "description": "Lightweight and breathable running shoes for everyday workouts.",
+    "category": "fashion or wears",
+    "price": 89.5,
+    "brand": "Nike"
+  },
+  {
+    "id": 3,
+    "name": "Unisex Cotton T-Shirt",
+    "description": "Soft cotton t-shirt with minimalistic design, available in multiple colors.",
+    "category": "fashion or wears",
+    "price": 19.99,
+    "brand": "H&M"
+  },
+  {
+    "id": 4,
+    "name": "Bluetooth Wireless Earbuds",
+    "description": "Noise-canceling earbuds with 20-hour battery life.",
+    "category": "electronics",
+    "price": 39.99,
+    "brand": "SoundCore"
+  },
+  {
+    "id": 5,
+    "name": "4K Smart TV 55-inch",
+    "description": "Ultra HD smart television with built-in streaming apps.",
+    "category": "electronics",
+    "price": 449.99,
+    "brand": "Samsung"
+  },
+  {
+    "id": 6,
+    "name": "Gaming Mouse with RGB",
+    "description": "Ergonomic gaming mouse with customizable buttons and RGB lighting.",
+    "category": "electronics",
+    "price": 29.99,
+    "brand": "Logitech"
+  },
+  {
+    "id": 7,
+    "name": "Air Fryer XL 5.8QT",
+    "description": "Cook crispy meals with little to no oil using this large air fryer.",
+    "category": "home appliance",
+    "price": 119.0,
+    "brand": "COSORI"
+  },
+  {
+    "id": 8,
+    "name": "Automatic Espresso Machine",
+    "description": "One-touch espresso machine with milk frother.",
+    "category": "home appliance",
+    "price": 329.99,
+    "brand": "De'Longhi"
+  },
+  {
+    "id": 9,
+    "name": "Robot Vacuum Cleaner",
+    "description": "Self-charging robot vacuum with smart app control and scheduling.",
+    "category": "home appliance",
+    "price": 199.99,
+    "brand": "iRobot"
+  },
+  {
+    "id": 10,
+    "name": "Women's Leather Handbag",
+    "description": "Elegant genuine leather handbag with multiple compartments.",
+    "category": "fashion or wears",
+    "price": 139.0,
+    "brand": "Michael Kors"
+  },
+  {
+    "id": 11,
+    "name": "Portable Power Bank 20000mAh",
+    "description": "Fast-charging power bank with dual USB output and LED indicator.",
+    "category": "electronics",
+    "price": 25.99,
+    "brand": "Anker"
+  },
+  {
+    "id": 12,
+    "name": "Electric Kettle 1.7L",
+    "description": "Stainless steel electric kettle with auto shut-off and boil-dry protection.",
+    "category": "home appliance",
+    "price": 34.95,
+    "brand": "Philips"
+  }
+]
