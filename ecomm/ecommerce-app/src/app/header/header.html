@@ -1,0 +1,60 @@
+<header class="bg-white shadow-md">
+  <div class="container mx-auto px-4 py-4">
+    <div class="flex items-center justify-between">
+      <!-- Logo -->
+      <div class="flex items-center">
+        <a routerLink="/" class="text-2xl font-bold text-blue-600 hover:text-blue-800 transition-colors">
+          🛍️ ShopHub
+        </a>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="flex-1 max-w-md mx-8">
+        <div class="relative">
+          <input type="text" placeholder="Search products..." [(ngModel)]="searchQuery" (input)="onSearch($event)"
+            class="w-full px-4 py-2 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <!-- Navigation Links -->
+      <nav class="flex items-center space-x-6">
+        <a routerLink="/products" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Products</a>
+        <a routerLink="/cart" class="relative group">
+          <span class="material-icons">shopping_cart</span>
+
+          <!-- Cart item count badge -->
+          <span *ngIf="cartCount > 0"
+            class="absolute -top-1 -right-2 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+            {{ cartCount }}
+          </span>
+        </a>
+
+
+
+        <!-- Show when NOT logged in -->
+        <ng-container *ngIf="!isLoggedIn">
+          <a routerLink="/login" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">
+            Login
+          </a>
+          <a routerLink="/signup"
+            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 font-medium transition-colors">
+            Sign Up
+          </a>
+        </ng-container>
+
+        <!-- Show when logged in -->
+        <ng-container *ngIf="isLoggedIn">
+          <button (click)="onLogout()"
+            class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 font-medium transition-colors">
+            Logout
+          </button>
+        </ng-container>
+      </nav>
+    </div>
+  </div>
+</header>
