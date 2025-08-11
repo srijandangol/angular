@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { CartService } from '../service/cart/cart.service';
+import { Product } from '../models/product-model';
 
 @Component({
   selector: 'app-product-detail',
@@ -9,20 +11,27 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./productdetail.scss']
 })
 export class ProductDetailComponent implements OnInit {
-  product: any;
+  product: Product | any;
 
-  constructor(private route: ActivatedRoute, private http: HttpClient) {}
+  constructor(
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private cartService: CartService
+  ) {}
 
   ngOnInit(): void {
-    console.log('ProductDetailComponent initialized');
-    const id = this.route.snapshot.paramMap.get('id');
+    const idParam = this.route.snapshot.paramMap.get('id');
+    const id = Number(idParam);
 
-    this.http.get<any[]>('assets/products.json').subscribe((products) => {
-      this.product = products.find((p) => p.id == id);
+    this.http.get<Product[]>('assets/products.json').subscribe((products) => {
+      const foundProduct = products.find((p) => p.id === id);
+      if (foundProduct) {
+        this.product = foundProduct;
+      }
     });
   }
 
-  addToCart(product: any) {
-    console.log('Added to cart:', product);
+  addToCart(product: Product) {
+    this.cartService.addToCart(product);
   }
 }

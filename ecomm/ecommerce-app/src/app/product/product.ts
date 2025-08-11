@@ -23,7 +23,6 @@ export class ProductComponent {
   ngOnInit(): void {
     this.http.get<Product[]>('assets/products.json').subscribe(data => {
       this.products = data;
-      console.log('Products loaded:', this.products);
     });
   }
 
@@ -34,6 +33,5 @@ export class ProductComponent {
 
   addToCart(product: Product) {
     this.cartService.addToCart(product);
-    console.log('Added to cart:', product);
   }
 }

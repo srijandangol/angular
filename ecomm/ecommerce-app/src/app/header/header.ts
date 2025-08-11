@@ -2,33 +2,50 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../service/auth/auth.service';
+import { CartService } from '../service/cart/cart.service';
 
 @Component({
   selector: 'app-header',
   standalone: false,
   templateUrl: './header.html',
-  styleUrls: ['./header.scss'] // fixed typo: styleUrl ➝ styleUrls
+  styleUrls: ['./header.scss']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   searchQuery = '';
   cartCount = 0;
   isLoggedIn = false;
-  private sub?: Subscription;
+  private authSub?: Subscription;
+  private cartSub?: Subscription;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private cartService: CartService
+  ) {}
 
   ngOnInit(): void {
-    // ✅ Subscribe to login status reactively
-    this.sub = this.authService.isLoggedIn$.subscribe((status) => {
+    this.authSub = this.authService.isLoggedIn$.subscribe((status) => {
+      // If user just logged out, redirect to login
+      if (this.isLoggedIn && !status) {
+        this.router.navigate(['/login']);
+      }
+
       this.isLoggedIn = status;
+
+      // Optionally reset cart count if logged out
+      if (!status) {
+        this.cartCount = 0;
+      }
     });
 
-    this.loadCartCount();
-  }
-
-  loadCartCount(): void {
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    this.cartCount = cart.length;
+    this.cartSub = this.cartService.cartCount$.subscribe((count) => {
+      // Only update cart count if logged in
+      if (this.isLoggedIn) {
+        this.cartCount = count;
+      } else {
+        this.cartCount = 0;
+      }
+    });
   }
 
   onSearch(event: Event): void {
@@ -43,6 +60,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.sub?.unsubscribe();
+    this.authSub?.unsubscribe();
+    this.cartSub?.unsubscribe();
   }
 }
