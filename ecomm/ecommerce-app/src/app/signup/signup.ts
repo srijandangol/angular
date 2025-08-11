@@ -4,6 +4,8 @@ import { checkPasswordStrength, validateSignupForm } from './validation.utils';
 import { SignupFormTypes } from './signup.types';
 import { Router } from '@angular/router';
 import { SignupService } from './signup.service';
+import { AuthService } from '../service/auth/auth.service';
+import { User } from '../models/user-model';
 
 @Component({
   selector: 'app-signup',
@@ -18,7 +20,11 @@ export class SignupComponent {
   errorMessage = '';
   passwordStrength: PasswordStrength | '' = '';
 
-  constructor(private router: Router, private signupService: SignupService) {}
+  constructor(
+    private router: Router,
+    private signupService: SignupService,
+    private authService: AuthService
+  ) {}
 
   onInputChange(): void {
     this.isFormValid = validateSignupForm(this.signupForm);
@@ -34,7 +40,17 @@ export class SignupComponent {
     this.isLoading = true;
     this.errorMessage = '';
 
-    this.signupService.saveUser(this.signupForm);
+    // Create user object for storage
+    const userData: User = {
+      userName: this.signupForm.userName,
+      password: this.signupForm.password,
+      email: this.signupForm.email,
+      fullName: this.signupForm.fullName,
+      role: 'user'
+    };
+
+    // Save user data using auth service
+    this.authService.saveUserData(userData);
 
     alert('Signup successful! You can now log in.');
 
@@ -62,6 +78,11 @@ export class SignupComponent {
    // Add aliases for template event handlers to avoid errors
    onFullNameChange = () => {
     console.log('Full name changed:', this.signupForm.fullName);
+    this.onInputChange();
+  };
+
+  onUserNameChange = () => {
+    console.log('Username changed:', this.signupForm.userName);
     this.onInputChange();
   };
 

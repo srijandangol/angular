@@ -1,21 +1,26 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminComponent } from './admin';
-import { ManageProductsComponent } from './manage-products/manage-products';
+import { AddProductComponent } from './add-product/add-product';
+import { UpdateProductComponent } from './update-product/update-product';
 
 const routes: Routes = [
   {
+    path: 'update-product/:id',
+    component: UpdateProductComponent,
+  },
+  {
+    path: 'add-product',
+    component: AddProductComponent,
+  },
+  {
     path: '',
     component: AdminComponent,
-    children: [
-      { path: '', redirectTo: 'manage-products', pathMatch: 'full' },
-      { path: 'manage-products', component: ManageProductsComponent }
-    ]
-  }
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AdminRoutingModule { }
+export class AdminRoutingModule {}

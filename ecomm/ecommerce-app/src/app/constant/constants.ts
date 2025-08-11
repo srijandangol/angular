@@ -2,6 +2,7 @@ export const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const INITIAL_SIGNUP_FORM = {
   fullName: '',
+  userName: '',
   email: '',
   password: '',
   confirmPassword: '',
@@ -24,13 +25,13 @@ export const ERROR_MESSAGES = {
 // src/app/components/login/login.constants.ts
 
 export const INITIAL_LOGIN_FORM = {
-  email: '',
+  userName: '',
   password: '',
   rememberMe: false
 };
 
 export const LOGIN_ERROR_MESSAGES = {
   invalidForm: 'Please fill in all required fields correctly.',
-  invalidCredentials: 'Invalid email or password'
+  invalidCredentials: 'Invalid username or password'
 };
 

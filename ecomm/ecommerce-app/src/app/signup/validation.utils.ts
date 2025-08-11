@@ -5,6 +5,7 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const validateSignupForm = (form: SignupFormTypes): boolean =>
   form.fullName.length > 0 &&
+  form.userName.length > 0 &&
   form.email.length > 0 &&
   form.password.length >= 8 &&
   form.password === form.confirmPassword &&

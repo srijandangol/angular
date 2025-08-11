@@ -1,36 +1,38 @@
 export interface Product {
   id: number;
-  name: string;
+  productName: string;
   description: string;
-  price: number;
+  productPrice: number;
   category: string;
   brand: string;
-  imageUrl?: string; // optional array of image URLs
-  stock?: number;      // optional stock count
-  rating?: number;     // optional rating value
+  image: string;
+  rating: number;
+  currency: string;
+  stock: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
+export enum ProductCategory {
+  All = 'All Products',
+  Electronics = 'Electronics',
+  Clothing = 'Clothing',
+  Books = 'Books',
+  HomeAndGarden = 'Home & Garden',
+  Sports = 'Sports'
+}
 
-
-// export enum ProductCategory {
-//   FashionOrWears = 'fashion or wears',
-//   Electronics = 'electronics',
-//   HomeAppliance = 'home appliance'
-// }
-
-// export enum Brand {
-//   Levis = "Levi's",
-//   Nike = "Nike",
-//   HM = "H&M",
-//   SoundCore = "SoundCore",
-//   Samsung = "Samsung",
-//   Logitech = "Logitech",
-//   COSORI = "COSORI",
-//   DeLonghi = "De'Longhi",
-//   IRobot = "iRobot",
-//   MichaelKors = "Michael Kors",
-//   Anker = "Anker",
-//   Philips = "Philips"
-// }
+export enum Brand {
+  Levis = "Levi's",
+  Nike = "Nike",
+  HM = "H&M",
+  SoundCore = "SoundCore",
+  Samsung = "Samsung",
+  Logitech = "Logitech",
+  COSORI = "COSORI",
+  DeLonghi = "De'Longhi",
+  IRobot = "iRobot",
+  MichaelKors = "Michael Kors",
+  Anker = "Anker",
+  Philips = "Philips"
+}

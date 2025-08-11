@@ -1,7 +1,7 @@
 // src/app/components/login/login.types.ts
 
 export type LoginFormTypes = {
-  email: string;
+  userName: string;
   password: string;
   rememberMe: boolean;
 };

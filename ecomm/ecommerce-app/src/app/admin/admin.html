@@ -1,15 +1,172 @@
-<div class="admin-container">
-  <header class="admin-header">
-    <div class="admin-nav">
-      <h1>Admin Dashboard</h1>
-      <nav class="nav-links">
-        <a routerLink="/admin/manage-products" routerLinkActive="active">Manage Products</a>
-        <button class="logout-btn" (click)="logout()">Logout</button>
-      </nav>
+<!-- <app-header [isSearchNeeded]="false"></app-header> -->
+<div class="px-6 sm:px-10 lg:px-20 py-10 bg-gray-50 min-h-screen">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-semibold text-gray-800">Product Management</h2>
+    <button mat-raised-button color="primary" type="button" (click)="addProduct()" class="flex items-center gap-2">
+      <mat-icon>add</mat-icon> Add Product
+    </button>
+  </div>
+
+  <ng-container *ngIf="products$ | async as products">
+
+    <!-- Stats Grid -->
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+      <!-- Total Products -->
+      <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+        <div class="flex items-center">
+          <div class="p-2 bg-blue-100 rounded-lg">
+            <mat-icon class="text-blue-600">inventory</mat-icon>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm font-medium text-gray-500">Total Products</p>
+            <p class="text-lg font-semibold text-gray-900">{{ totalProducts$ | async }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- In Stock -->
+      <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+        <div class="flex items-center">
+          <div class="p-2 bg-green-100 rounded-lg">
+            <mat-icon class="text-green-600">check_circle</mat-icon>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm font-medium text-gray-500">In Stock</p>
+            <p class="text-lg font-semibold text-gray-900">{{ inStockProducts$ | async }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Low Stock -->
+      <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+        <div class="flex items-center">
+          <div class="p-2 bg-yellow-100 rounded-lg">
+            <mat-icon class="text-yellow-600">warning</mat-icon>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm font-medium text-gray-500">Low Stock</p>
+            <p class="text-lg font-semibold text-gray-900">{{ lowStockProducts$ | async }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Out of Stock -->
+      <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+        <div class="flex items-center">
+          <div class="p-2 bg-red-100 rounded-lg">
+            <mat-icon class="text-red-600">error</mat-icon>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm font-medium text-gray-500">Out of Stock</p>
+            <p class="text-lg font-semibold text-gray-900">{{ outOfStockProducts$ | async }}</p>
+          </div>
+        </div>
+      </div>
     </div>
-  </header>
-  
-  <main class="admin-content">
-    <router-outlet></router-outlet>
-  </main>
+
+    <!-- Products Table -->
+    <div class="bg-white shadow-md rounded-lg overflow-hidden mt-6">
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <!-- Table Header -->
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Brand</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rating</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+            </tr>
+          </thead>
+
+          <!-- Table Body -->
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr *ngFor="let product of products" class="hover:bg-gray-50 transition-colors">
+              <!-- Product Info -->
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0 h-16 w-16">
+                    <img *ngIf="product.image" [src]="product.image" [alt]="product.productName"
+                      class="h-16 w-16 object-cover rounded-lg border border-gray-200" />
+                    <div *ngIf="!product.image"
+                      class="h-16 w-16 bg-gray-200 rounded-lg flex items-center justify-center">
+                      <mat-icon class="text-gray-400">image</mat-icon>
+                    </div>
+                  </div>
+                  <div class="ml-4">
+                    <div class="text-sm font-medium text-gray-900">{{ product.productName }}</div>
+                    <div class="text-sm text-gray-500 max-w-xs truncate">{{ product.description }}</div>
+                  </div>
+                </div>
+              </td>
+
+              <!-- Category -->
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                  {{ product.category }}
+                </span>
+              </td>
+
+              <!-- Brand -->
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {{ product.brand }}
+              </td>
+
+              <!-- Price -->
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-green-600">
+                {{ product.productPrice | currency : 'USD' }}
+              </td>
+
+              <!-- Stock -->
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full" [ngClass]="{
+                    'bg-red-100 text-red-800': product.stock <= 10,
+                    'bg-yellow-100 text-yellow-800': product.stock > 10 && product.stock <= 30,
+                    'bg-green-100 text-green-800': product.stock > 30
+                  }">
+                  {{ product.stock }} units
+                </span>
+              </td>
+
+              <!-- Rating -->
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <mat-icon class="text-yellow-400 text-sm">star</mat-icon>
+                  <span class="ml-1 text-sm text-gray-900">{{ product.rating }}</span>
+                </div>
+              </td>
+
+              <!-- Actions -->
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <div class="flex items-center gap-2">
+                  <button mat-raised-button color="primary" size="small" (click)="onUpdate(product)"
+                    class="flex items-center gap-1">
+                    <mat-icon class="text-sm">edit</mat-icon> Edit
+                  </button>
+
+                  <button mat-raised-button color="warn" size="small" (click)="onDelete(product)"
+                    class="flex items-center gap-1">
+                    <mat-icon class="text-sm">delete</mat-icon> Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="products.length === 0" class="text-center py-12">
+        <mat-icon class="text-gray-400 text-6xl mb-4">inventory_2</mat-icon>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">No products found</h3>
+        <p class="text-gray-500 mb-4">Get started by adding your first product.</p>
+        <button mat-raised-button color="primary" (click)="addProduct()" class="flex items-center gap-2 mx-auto">
+          <mat-icon>add</mat-icon> Add Product
+        </button>
+      </div>
+    </div>
+
+  </ng-container>
 </div>

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Product } from '../../models/product-model';
-import productsData from '../../../assets/products.json';
+import productsData from '../../../../public/assets/products.json';
 
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -28,11 +28,15 @@ export class ProductService {
     this.productsSubject.next(products);
   }
 
-  private getDefaultProducts(): Product[] {
-  return productsData as Product[];
-}
+ private getDefaultProducts(): Product[] {
+    return productsData as Product[];
+  }
 
   getProducts(): Observable<Product[]> {
+    return this.products$;
+  }
+
+  getProductList(): Observable<Product[]> {
     return this.products$;
   }
 
@@ -41,10 +45,15 @@ export class ProductService {
     return products.find(product => product.id === id);
   }
 
+  getProductById(id: string | number): Observable<Product | undefined> {
+    const product = this.getProduct(Number(id));
+    return of(product);
+  }
+
   addProduct(productData: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>): Product {
     const products = this.productsSubject.value;
     const newId = Math.max(...products.map(p => p.id), 0) + 1;
-    
+
     const newProduct: Product = {
       ...productData,
       id: newId,
@@ -57,10 +66,10 @@ export class ProductService {
     return newProduct;
   }
 
-  updateProduct(id: number, productData: Partial<Omit<Product, 'id' | 'createdAt'>>): Product | null {
+  updateProduct(productData: Product): Product | null {
     const products = this.productsSubject.value;
-    const index = products.findIndex(product => product.id === id);
-    
+    const index = products.findIndex(product => product.id === productData.id);
+
     if (index === -1) {
       return null;
     }
@@ -80,7 +89,7 @@ export class ProductService {
   deleteProduct(id: number): boolean {
     const products = this.productsSubject.value;
     const filteredProducts = products.filter(product => product.id !== id);
-    
+
     if (filteredProducts.length === products.length) {
       return false; // Product not found
     }
