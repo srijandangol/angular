@@ -3,12 +3,15 @@ export interface Product {
   name: string;
   description: string;
   price: number;
-  stock: number;
   category: string;
   brand: string;
-  rating: number;
-  imageUrl?: string[];
+  imageUrl?: string; // optional array of image URLs
+  stock?: number;      // optional stock count
+  rating?: number;     // optional rating value
+  createdAt?: Date;
+  updatedAt?: Date;
 }
+
 
 
 // export enum ProductCategory {

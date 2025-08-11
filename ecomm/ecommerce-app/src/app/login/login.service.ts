@@ -13,8 +13,14 @@ export class LoginService {
     return data ? JSON.parse(data) : null;
   }
 
-  validateCredentials(email: string, password: string): boolean {
-    const user = this.getUser();
-    return user?.email === email && user?.password === password;
+  validateCredentials(email: string, password: string): { isValid: boolean; role?: string } {
+  // Example hardcoded users:
+  if (email === 'admin@example.com' && password === 'adminpass') {
+    return { isValid: true, role: 'admin' };
   }
+  if (email === 'user@example.com' && password === 'userpass') {
+    return { isValid: true, role: 'user' };
+  }
+  return { isValid: false };
+}
 }

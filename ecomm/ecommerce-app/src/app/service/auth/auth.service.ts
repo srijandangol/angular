@@ -5,24 +5,41 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
+  private localStorageKey = 'user'; // ✅ Added this
+  private tokenKey = 'authToken';   // ✅ Keep a separate key for token
+
   private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
-  isLoggedIn$ = this.isLoggedInSubject.asObservable(); // ✅ This is what you'll subscribe to
+  isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
   private hasToken(): boolean {
-    return !!localStorage.getItem('authToken');
+    return !!localStorage.getItem(this.tokenKey);
   }
 
   isLoggedIn(): boolean {
-    return this.hasToken();
+    return !!localStorage.getItem(this.localStorageKey);
   }
 
-  login(token: string): void {
-    localStorage.setItem('authToken', token);
-    this.isLoggedInSubject.next(true); // ✅ Notify subscribers
+  getUserRole(): string | null {
+    const userData = localStorage.getItem(this.localStorageKey);
+    if (userData) {
+      return JSON.parse(userData).role || null;
+    }
+    return null;
+  }
+
+  isAdmin(): boolean {
+    return this.getUserRole() === 'admin';
+  }
+
+  login(token: string, user: { role: string }): void {
+    localStorage.setItem(this.tokenKey, token);
+    localStorage.setItem(this.localStorageKey, JSON.stringify(user));
+    this.isLoggedInSubject.next(true);
   }
 
   logout(): void {
-    localStorage.removeItem('authToken');
-    this.isLoggedInSubject.next(false); // ✅ Notify subscribers
+    localStorage.removeItem(this.tokenKey);
+    localStorage.removeItem(this.localStorageKey);
+    this.isLoggedInSubject.next(false);
   }
 }

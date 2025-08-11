@@ -34,30 +34,35 @@ loginForm: LoginFormTypes = { ...INITIAL_LOGIN_FORM };
     this.isFormValid = validateLoginForm(this.loginForm);
   }
 
-  onSubmit(): void {
-    if (!this.isFormValid) {
-      this.errorMessage = LOGIN_ERROR_MESSAGES.invalidForm;
-      return;
-    }
-
-    this.errorMessage = '';
-    this.isLoading = true;
-
-    const isValidUser = this.loginService.validateCredentials(
-      this.loginForm.email,
-      this.loginForm.password
-    );
-
-    if (isValidUser) {
-      console.log('Login successful');
-      this.authService.login('dummy-token');
-      this.router.navigate(['/product']);
-    } else {
-      this.errorMessage = LOGIN_ERROR_MESSAGES.invalidCredentials;
-    }
-
-    this.isLoading = false;
+onSubmit(): void {
+  if (!this.isFormValid) {
+    this.errorMessage = LOGIN_ERROR_MESSAGES.invalidForm;
+    return;
   }
+
+  this.errorMessage = '';
+  this.isLoading = true;
+
+  const result = this.loginService.validateCredentials(
+    this.loginForm.email,
+    this.loginForm.password
+  );
+
+  if (result.isValid && result.role) {
+    console.log('Login successful');
+    this.authService.login('dummy-token', { role: result.role });
+    if (result.role === 'admin') {
+      this.router.navigate(['/admin/dashboard']);  // Admin landing page
+    } else {
+      this.router.navigate(['/product']);          // User landing page
+    }
+  } else {
+    this.errorMessage = LOGIN_ERROR_MESSAGES.invalidCredentials;
+  }
+
+  this.isLoading = false;
+}
+
 
   // Form change handlers
   onEmailChange = this.onInputChange;
