@@ -28,13 +28,13 @@
       />
 
       <!-- Product Image -->
-      <img [src]="item.imageUrl" alt="{{ item.name }}" class="w-16 h-16 object-cover rounded" />
+      <img [src]="item.image" alt="{{ item.productName }}" class="w-16 h-16 object-cover rounded" />
 
       <!-- Product Info -->
       <div class="flex flex-col">
-        <span class="font-semibold">{{ item.name }}</span>
+        <span class="font-semibold">{{ item.productName }}</span>
         <span class="text-sm text-gray-500">Category: {{ item.category }}</span>
-        <span class="text-sm text-gray-500">Price: ${{ item.price | currency }}</span>
+        <span class="text-sm text-gray-500">Price: ${{ item.productPrice | currency }}</span>
       </div>
     </div>
 

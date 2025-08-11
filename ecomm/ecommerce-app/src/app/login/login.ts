@@ -13,7 +13,7 @@ import { validateLoginForm } from './validation.utils';
   styleUrls: ['./login.scss']
 })
 export class LoginComponent {
-loginForm: LoginFormTypes = { ...INITIAL_LOGIN_FORM };
+  loginForm: LoginFormTypes = { ...INITIAL_LOGIN_FORM };
   isFormValid = false;
   isLoading = false;
   errorMessage = '';
@@ -21,51 +21,49 @@ loginForm: LoginFormTypes = { ...INITIAL_LOGIN_FORM };
   constructor(
     private router: Router,
     private loginService: LoginService,
-    private authService: AuthService // ✅ Inject AuthService
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
-    if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/product']);
-    }
+    // Remove automatic redirect to allow login page to open
+    // Users should be able to access login page even if logged in
   }
 
   onInputChange(): void {
     this.isFormValid = validateLoginForm(this.loginForm);
   }
 
-onSubmit(): void {
-  if (!this.isFormValid) {
-    this.errorMessage = LOGIN_ERROR_MESSAGES.invalidForm;
-    return;
-  }
-
-  this.errorMessage = '';
-  this.isLoading = true;
-
-  const result = this.loginService.validateCredentials(
-    this.loginForm.email,
-    this.loginForm.password
-  );
-
-  if (result.isValid && result.role) {
-    console.log('Login successful');
-    this.authService.login('dummy-token', { role: result.role });
-    if (result.role === 'admin') {
-      this.router.navigate(['/admin/dashboard']);  // Admin landing page
-    } else {
-      this.router.navigate(['/product']);          // User landing page
+  onSubmit(): void {
+    if (!this.isFormValid) {
+      this.errorMessage = LOGIN_ERROR_MESSAGES.invalidForm;
+      return;
     }
-  } else {
-    this.errorMessage = LOGIN_ERROR_MESSAGES.invalidCredentials;
+
+    this.errorMessage = '';
+    this.isLoading = true;
+
+    const result = this.loginService.validateCredentials(
+      this.loginForm.userName, // Changed from email to userName
+      this.loginForm.password
+    );
+
+    if (result.isValid && result.role) {
+      console.log('Login successful');
+      this.authService.login('dummy-token', { role: result.role });
+      if (result.role === 'admin') {
+        this.router.navigate(['/admin']);  // Admin landing page
+      } else {
+        this.router.navigate(['/product']);          // User landing page
+      }
+    } else {
+      this.errorMessage = LOGIN_ERROR_MESSAGES.invalidCredentials;
+    }
+
+    this.isLoading = false;
   }
-
-  this.isLoading = false;
-}
-
 
   // Form change handlers
-  onEmailChange = this.onInputChange;
+  onUserNameChange = this.onInputChange; // Changed from onEmailChange
   onPasswordChange = this.onInputChange;
 
   // Extra handlers (optional UI interactions)

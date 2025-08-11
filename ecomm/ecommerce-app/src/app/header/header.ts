@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../service/auth/auth.service';
@@ -11,9 +11,11 @@ import { CartService } from '../service/cart/cart.service';
   styleUrls: ['./header.scss']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
+  @Input() isSearchNeeded: boolean = true;
   searchQuery = '';
   cartCount = 0;
   isLoggedIn = false;
+  isAdmin = false;
   private authSub?: Subscription;
   private cartSub?: Subscription;
 
@@ -31,6 +33,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       }
 
       this.isLoggedIn = status;
+      this.isAdmin = this.authService.isAdmin();
 
       // Optionally reset cart count if logged out
       if (!status) {
