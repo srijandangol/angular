@@ -2,27 +2,26 @@
 
   <!-- Product Image -->
   <div class="w-full">
-    <img [src]="product.imageUrl"
-         [alt]="product.name"
+    <img [src]="product?.imageUrl"
          class="w-full h-auto object-cover rounded-lg border" />
   </div>
 
   <!-- Product Details -->
   <div class="flex flex-col justify-between">
     <div>
-      <h1 class="text-3xl font-bold text-gray-800 mb-4">{{ product.name }}</h1>
+      <h1 class="text-3xl font-bold text-gray-800 mb-4">{{ product?.name }}</h1>
 
       <p class="text-sm text-gray-500 mb-2">
-        <span class="font-semibold">Brand:</span> {{ product.brand }}
+        <span class="font-semibold">Brand:</span> {{ product?.brand }}
       </p>
 
       <p class="text-sm text-gray-500 mb-2">
-        <span class="font-semibold">Category:</span> {{ product.category }}
+        <span class="font-semibold">Category:</span> {{ product?.category }}
       </p>
 
-      <p class="text-gray-700 mb-4">{{ product.description }}</p>
+      <p class="text-gray-700 mb-4">{{ product?.description }}</p>
 
-      <p class="text-2xl font-bold text-green-600">${{ product.price }}</p>
+      <p class="text-2xl font-bold text-green-600">${{ product?.price }}</p>
     </div>
 
     <button (click)="addToCart(product)"

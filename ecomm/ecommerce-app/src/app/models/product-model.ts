@@ -5,8 +5,9 @@ export interface Product {
   price: number;
   stock: number;
   category: string;
+  brand: string;
   rating: number;
-  imageUrl: string[];
+  imageUrl?: string[];
 }
 
 
