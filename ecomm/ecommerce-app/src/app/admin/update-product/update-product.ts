@@ -3,7 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../service/product/product.service';
 import { NotificationService } from '../../service/notification.service';
-import { Product } from '../../models/product-model';
+import { Product, ProductCategory } from '../../models/product-model';
+import { DialogService } from '../../shared/services/dialog.service';
 
 @Component({
   selector: 'app-update-product',
@@ -13,13 +14,7 @@ import { Product } from '../../models/product-model';
 })
 export class UpdateProductComponent implements OnInit {
   productForm!: FormGroup;
-  categories = [
-    'Electronics',
-    'Clothing',
-    'Books',
-    'Home & Garden',
-    'Sports'
-  ];
+  categories = Object.values(ProductCategory).map((cat) => cat.toLowerCase());
   productId: string | null = null;
 
   constructor(
@@ -27,7 +22,8 @@ export class UpdateProductComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private productService: ProductService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -93,12 +89,25 @@ export class UpdateProductComponent implements OnInit {
     if (this.productForm.valid && this.productId) {
       const updatedProduct: Product = {
         ...this.productForm.value,
-        id: this.productId
+        id: parseInt(this.productId, 10) // Convert string ID to number
       };
 
-      this.productService.updateProduct(updatedProduct);
-      this.notificationService.success('Product updated successfully!');
-      this.router.navigate(['/admin']);
+      const updateSuccess = this.productService.updateProduct(updatedProduct);
+      if (updateSuccess) {
+        this.dialogService.openSuccessDialog(
+          'Success',
+          'Product updated successfully!',
+          'OK'
+        ).subscribe(() => {
+          this.router.navigate(['/admin']);
+        });
+      } else {
+        this.dialogService.openWarningDialog(
+          'Update Failed',
+          'Failed to update product. Product not found!',
+          'OK'
+        );
+      }
     }
   }
 

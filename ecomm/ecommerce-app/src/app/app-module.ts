@@ -6,6 +6,7 @@ import { AppRoutingModule } from './app-routing-module';
 import { App } from './app';
 import { HomepageModule } from './homepage/homepage-module';
 import { HeaderModule } from './header/header-module';
+import { SharedModule } from './shared/shared.module';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
@@ -26,6 +27,7 @@ import { MatButtonModule } from '@angular/material/button';
     HomepageModule,
     FormsModule,
     HeaderModule,
+    SharedModule,
     AppRoutingModule,
     MatIconModule,
     MatFormFieldModule,

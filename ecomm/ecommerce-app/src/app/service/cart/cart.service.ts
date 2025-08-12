@@ -31,9 +31,15 @@ export class CartService {
     return [...this.cart]; // Return a shallow copy
   }
 
-  addToCart(product: Product): void {
+  addToCart(product: Product): boolean {
+    if (!this.isLoggedIn()) {
+      console.log('User not logged in, cannot add to cart');
+      return false;
+    }
+    
     this.cart.push(product);
     this.saveCart();
+    return true;
   }
 
   removeItem(index: number): void {

@@ -1,0 +1,27 @@
+<div class="dialog-container">
+  <div class="dialog-header">
+    <div class="flex items-center gap-3">
+      <mat-icon [class]="getIconColor()" class="text-3xl">{{ getIconName() }}</mat-icon>
+      <h2 mat-dialog-title class="text-xl font-semibold text-gray-800 m-0">{{ data.title }}</h2>
+    </div>
+  </div>
+
+  <div mat-dialog-content class="dialog-content">
+    <p class="text-gray-600 leading-relaxed">{{ data.message }}</p>
+  </div>
+
+  <div mat-dialog-actions class="dialog-actions">
+    <button 
+      mat-button 
+      (click)="onCancel()" 
+      class="mr-2">
+      {{ data.cancelText }}
+    </button>
+    <button 
+      mat-raised-button 
+      [color]="getConfirmButtonColor()" 
+      (click)="onConfirm()">
+      {{ data.confirmText }}
+    </button>
+  </div>
+</div>

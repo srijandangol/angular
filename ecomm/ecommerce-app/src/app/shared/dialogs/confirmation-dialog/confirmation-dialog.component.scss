@@ -1,0 +1,43 @@
+.dialog-container {
+  min-width: 400px;
+  max-width: 500px;
+}
+
+.dialog-header {
+  padding: 24px 24px 16px 24px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.dialog-content {
+  padding: 16px 24px;
+  min-height: 60px;
+}
+
+.dialog-actions {
+  padding: 16px 24px 24px 24px;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.dialog-actions button {
+  min-width: 80px;
+}
+
+// Icon animations
+mat-icon {
+  transition: transform 0.2s ease-in-out;
+}
+
+mat-icon:hover {
+  transform: scale(1.1);
+}
+
+// Button hover effects
+button {
+  transition: all 0.2s ease-in-out;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+}

@@ -1,100 +1,72 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { map, Observable, of, tap } from 'rxjs';
 import { Product } from '../../models/product-model';
-import productsData from '../../../../public/assets/products.json';
-
-import { BehaviorSubject, Observable, of } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProductService {
+  private productsUrl = '../../assets/products.json';
   private localStorageKey = 'products';
-  private productsSubject = new BehaviorSubject<Product[]>([]);
-  public products$ = this.productsSubject.asObservable();
-
-  constructor() {
-    this.loadProducts();
-  }
-
-  private loadProducts(): void {
-    const storedProducts = localStorage.getItem(this.localStorageKey);
-    const products = storedProducts ? JSON.parse(storedProducts) : this.getDefaultProducts();
-    this.productsSubject.next(products);
-    this.saveProducts(products);
-  }
-
-  private saveProducts(products: Product[]): void {
-    localStorage.setItem(this.localStorageKey, JSON.stringify(products));
-    this.productsSubject.next(products);
-  }
-
- private getDefaultProducts(): Product[] {
-    return productsData as Product[];
-  }
-
-  getProducts(): Observable<Product[]> {
-    return this.products$;
+  constructor(private httpClient: HttpClient) {}
+  private getLocalProducts(): Product[] {
+    const localData = localStorage.getItem(this.localStorageKey);
+    return localData ? JSON.parse(localData) : [];
   }
 
   getProductList(): Observable<Product[]> {
-    return this.products$;
+    // return this.httpClient.get<Product[]>(this.productsUrl);
+    return of(this.getLocalProducts());
   }
-
-  getProduct(id: number): Product | undefined {
-    const products = this.productsSubject.value;
-    return products.find(product => product.id === id);
-  }
-
-  getProductById(id: string | number): Observable<Product | undefined> {
-    const product = this.getProduct(Number(id));
+  getProductById(id: string): Observable<Product | undefined> {
+    // return this.httpClient
+    //   .get<Product[]>(this.productsUrl)
+    //   .pipe(
+    //     map((products: Product[]) =>
+    //       products.find((p) => p.id.toString() === id)
+    //     )
+    //   );
+    const localProducts = this.getLocalProducts();
+    const product = localProducts.find((p) => p.id.toString() === id);
     return of(product);
   }
 
-  addProduct(productData: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>): Product {
-    const products = this.productsSubject.value;
-    const newId = Math.max(...products.map(p => p.id), 0) + 1;
-
-    const newProduct: Product = {
-      ...productData,
-      id: newId,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-
-    const updatedProducts = [...products, newProduct];
-    this.saveProducts(updatedProducts);
-    return newProduct;
+  addProduct(product: Product) {
+    const localProducts = this.getLocalProducts();
+    product.id = Date.now();
+    localProducts.push(product);
+    localStorage.setItem(this.localStorageKey, JSON.stringify(localProducts));
+  }
+  deleteProduct(id: string): void {
+    const localProducts = this.getLocalProducts();
+    const updatedProducts = localProducts.filter((p) => p.id.toString() !== id);
+    localStorage.setItem(this.localStorageKey, JSON.stringify(updatedProducts));
   }
 
-  updateProduct(productData: Product): Product | null {
-    const products = this.productsSubject.value;
-    const index = products.findIndex(product => product.id === productData.id);
+   updateProduct(updatedProduct: Product): boolean {
+    const localProducts = this.getLocalProducts();
+    const index = localProducts.findIndex((p) => p.id === updatedProduct.id);
 
-    if (index === -1) {
-      return null;
+    if (index !== -1) {
+      // Update existing product in place
+      localProducts[index] = { ...updatedProduct, updatedAt: new Date() };
+      localStorage.setItem(this.localStorageKey, JSON.stringify(localProducts));
+      return true;
+    } else {
+      // Product not found - this should not happen during update
+      console.error('Product not found for update:', updatedProduct.id);
+      return false;
     }
-
-    const updatedProduct: Product = {
-      ...products[index],
-      ...productData,
-      updatedAt: new Date()
-    };
-
-    const updatedProducts = [...products];
-    updatedProducts[index] = updatedProduct;
-    this.saveProducts(updatedProducts);
-    return updatedProduct;
   }
 
-  deleteProduct(id: number): boolean {
-    const products = this.productsSubject.value;
-    const filteredProducts = products.filter(product => product.id !== id);
 
-    if (filteredProducts.length === products.length) {
-      return false; // Product not found
-    }
 
-    this.saveProducts(filteredProducts);
-    return true;
+  loadProductsFromJsonToLocalStorage(): Observable<Product[]> {
+    return this.httpClient.get<Product[]>(this.productsUrl).pipe(
+      tap((products) => {
+        localStorage.setItem('products', JSON.stringify(products));
+      })
+    );
   }
 }

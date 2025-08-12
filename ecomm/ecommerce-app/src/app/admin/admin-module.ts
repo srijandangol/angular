@@ -7,6 +7,7 @@ import { AdminComponent } from './admin';
 import { AddProductComponent } from './add-product/add-product';
 import { UpdateProductComponent } from './update-product/update-product';
 import { HeaderModule } from '../header/header-module';
+import { SharedModule } from '../shared/shared.module';
 
 // Angular Material imports
 import { MatIconModule } from '@angular/material/icon';
@@ -26,6 +27,7 @@ import { MatButtonModule } from '@angular/material/button';
     AdminRoutingModule,
     ReactiveFormsModule,
     HeaderModule,
+    SharedModule,
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,

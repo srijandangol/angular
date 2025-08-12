@@ -8,4 +8,7 @@ export const AppRoutes = {
   PRODUCT: 'product',
   CART: 'cart',
   PRODUCT_DETAIL: (id: number | string) => `product/${id}`,
+    ADMIN: 'admin-dashboard',
+  ADDPRODUCT: 'add-product',
+  UPDATEPRODUCT: 'update-product',
 };
