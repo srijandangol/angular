@@ -3,7 +3,9 @@ import { Product } from '../models/product-model';
 import { HttpClient } from '@angular/common/http';
 import { AppRoutes } from '../constant/route.constant';
 import { Router } from '@angular/router';
-import { CartService } from '../service/cart/cart.service'; // ✅ Correct import
+import { CartService } from '../service/cart/cart.service';
+import { ProductService } from '../service/product/product.service';
+import { DialogService } from '../shared/services/dialog.service';
 
 @Component({
   selector: 'app-product',
@@ -17,12 +19,15 @@ export class ProductComponent {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private cartService: CartService // ✅ Proper injection
+    private cartService: CartService,
+    private productService: ProductService,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
-    this.http.get<Product[]>('assets/products.json').subscribe(data => {
+    this.productService.getProductList().subscribe(data => {
       this.products = data;
+      console.log('Products loaded:', this.products);
     });
   }
 
@@ -32,6 +37,25 @@ export class ProductComponent {
   }
 
   addToCart(product: Product) {
-    this.cartService.addToCart(product);
+    const success = this.cartService.addToCart(product);
+    
+    if (success) {
+      this.dialogService.openSuccessDialog(
+        'Added to Cart',
+        `"${product.productName}" has been added to your cart successfully!`,
+        'OK'
+      );
+    } else {
+      this.dialogService.openWarningDialog(
+        'Login Required',
+        'You need to be logged in to add items to your cart. Would you like to login now?',
+        'Login',
+        'Cancel'
+      ).subscribe(result => {
+        if (result) {
+          this.router.navigate(['/login']);
+        }
+      });
+    }
   }
 }

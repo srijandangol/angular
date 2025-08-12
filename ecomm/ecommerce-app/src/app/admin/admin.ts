@@ -5,6 +5,7 @@ import { Observable, map } from 'rxjs';
 import { ProductService } from '../service/product/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotificationService } from '../service/notification.service';
+import { DialogService } from '../shared/services/dialog.service';
 
 @Component({
   selector: 'app-admin',
@@ -25,7 +26,8 @@ export class AdminComponent implements OnInit {
     private productService: ProductService,
     private router: Router,
     private route: ActivatedRoute,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -61,11 +63,21 @@ export class AdminComponent implements OnInit {
   }
 
   onDelete(product: Product) {
-    if (confirm(`Are you sure you want to delete this product?`)) {
-      this.productService.deleteProduct(product.id);
-      this.loadProducts();
-      this.notificationService.success('Product deleted successfully!');
-    }
+    this.dialogService.openDeleteDialog(
+      'Delete Product',
+      `Are you sure you want to delete "${product.productName}"? This action cannot be undone.`,
+      'Delete',
+      'Cancel'
+    ).subscribe(result => {
+      if (result) {
+        this.productService.deleteProduct(product.id.toString());
+        this.loadProducts();
+        this.dialogService.openSuccessDialog(
+          'Success',
+          'Product deleted successfully!'
+        );
+      }
+    });
   }
 
   addProduct() {

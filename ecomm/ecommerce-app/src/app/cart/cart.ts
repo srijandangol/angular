@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CartService } from '../service/cart/cart.service';
+import { Product } from '../models/product-model';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DialogService } from '../shared/services/dialog.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -13,7 +15,12 @@ export class CartComponent implements OnInit {
   cartItems: any[] = [];
   selectedProductIds: number[] = [];
 
-  constructor(private cartService: CartService, private router: Router, private snackBar: MatSnackBar) {}
+  constructor(
+    private cartService: CartService, 
+    private router: Router, 
+    private snackBar: MatSnackBar,
+    private dialogService: DialogService
+  ) {}
 
  ngOnInit(): void {
   if (!this.cartService.isLoggedIn()) {
@@ -35,40 +42,89 @@ export class CartComponent implements OnInit {
   }
 
   removeItem(id: number): void {
-    this.cartService.removeItemById(id);
-    this.cartItems = this.cartService.getCartItems();
-    this.snackBar.open('Item removed from cart', 'Close', { duration: 2000 });
+    const item = this.cartItems.find(item => item.id === id);
+    const itemName = item ? item.productName : 'this item';
+    
+    this.dialogService.openDeleteDialog(
+      'Remove Item',
+      `Are you sure you want to remove "${itemName}" from your cart?`,
+      'Remove',
+      'Cancel'
+    ).subscribe(result => {
+      if (result) {
+        this.cartService.removeItemById(id);
+        this.cartItems = this.cartService.getCartItems();
+        this.snackBar.open('Item removed from cart', 'Close', { duration: 2000 });
+      }
+    });
   }
 
   removeSelected(): void {
-    this.cartService.removeSelectedItems(this.selectedProductIds);
-    this.cartItems = this.cartService.getCartItems();
-    this.selectedProductIds = [];
-    this.snackBar.open('Selected items removed', 'Close', { duration: 2000 });
+    if (this.selectedProductIds.length === 0) {
+      this.dialogService.openWarningDialog(
+        'No Items Selected',
+        'Please select at least one item to remove.',
+        'OK'
+      );
+      return;
+    }
+
+    this.dialogService.openDeleteDialog(
+      'Remove Selected Items',
+      `Are you sure you want to remove ${this.selectedProductIds.length} selected item(s) from your cart?`,
+      'Remove All',
+      'Cancel'
+    ).subscribe(result => {
+      if (result) {
+        this.cartService.removeSelectedItems(this.selectedProductIds);
+        this.cartItems = this.cartService.getCartItems();
+        this.selectedProductIds = [];
+        this.snackBar.open('Selected items removed', 'Close', { duration: 2000 });
+      }
+    });
   }
 
   getTotalPrice(): number {
-  return this.cartItems.reduce((total, item) => total + (item.price || 0), 0);
+  return this.cartItems.reduce((total, item) => total + (item.productPrice || 0), 0);
 }
 
 
   checkoutSelected(): void {
-  const selectedItems = this.cartItems.filter(item => this.selectedProductIds.includes(item.id));
+    const selectedItems = this.cartItems.filter(item => this.selectedProductIds.includes(item.id));
 
-  if (selectedItems.length === 0) {
-    alert('Please select at least one item to checkout.');
-    return;
+    if (selectedItems.length === 0) {
+      this.dialogService.openWarningDialog(
+        'No Items Selected',
+        'Please select at least one item to checkout.',
+        'OK'
+      );
+      return;
+    }
+
+    const totalPrice = selectedItems.reduce((total, item) => total + (item.productPrice || 0), 0);
+
+    this.dialogService.openInfoDialog(
+      'Confirm Checkout',
+      `Are you sure you want to checkout ${selectedItems.length} item(s) for $${totalPrice.toFixed(2)}?`,
+      'Checkout',
+      'Cancel'
+    ).subscribe(result => {
+      if (result) {
+        // Keep only the unselected items in cart
+        this.cartItems = this.cartItems.filter(item => !this.selectedProductIds.includes(item.id));
+        this.selectedProductIds = [];
+
+        // Update localStorage
+        localStorage.setItem('cart', JSON.stringify(this.cartItems));
+
+        // Show success dialog
+        this.dialogService.openSuccessDialog(
+          'Checkout Successful!',
+          `Your order has been placed successfully. Total: $${totalPrice.toFixed(2)}`,
+          'OK'
+        );
+      }
+    });
   }
-
-  // Show alert
-  alert('Checkout successful for selected items!');
-
-  // Keep only the unselected items in cart
-  this.cartItems = this.cartItems.filter(item => !this.selectedProductIds.includes(item.id));
-  this.selectedProductIds = [];
-
-  // Update localStorage
-  localStorage.setItem('cart', JSON.stringify(this.cartItems));
-}
 
 }

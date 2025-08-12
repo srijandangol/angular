@@ -88,9 +88,9 @@
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-center">
                   <div class="flex-shrink-0 h-16 w-16">
-                    <img *ngIf="product.image" [src]="product.image" [alt]="product.productName"
+                    <img *ngIf="product?.image" [src]="product?.image" [alt]="product.productName"
                       class="h-16 w-16 object-cover rounded-lg border border-gray-200" />
-                    <div *ngIf="!product.image"
+                    <div *ngIf="!product?.image"
                       class="h-16 w-16 bg-gray-200 rounded-lg flex items-center justify-center">
                       <mat-icon class="text-gray-400">image</mat-icon>
                     </div>
