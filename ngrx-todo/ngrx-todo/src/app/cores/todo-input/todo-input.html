@@ -1,0 +1,29 @@
+<div class="max-w-md mx-auto mt-10 p-4 bg-white rounded shadow">
+  <form [formGroup]="todoForm" (ngSubmit)="add()" class="flex gap-2">
+    <input 
+      formControlName="newTodo" 
+      placeholder="Enter Task"
+      class="flex-1 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+    />
+    <button 
+      type="submit" 
+      [disabled]="todoForm.invalid"
+      class="bg-blue-500 text-white px-4 py-2 rounded disabled:opacity-50"
+    >
+      Add
+    </button>
+  </form>
+
+  <ul class="mt-4 space-y-2">
+    <li *ngFor="let todo of todos$ | async; let i = index" 
+        class="flex justify-between items-center p-2 bg-gray-100 rounded">
+      <span>{{ todo }}</span>
+      <button 
+        (click)="remove(i)"
+        class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+      >
+        Delete
+      </button>
+    </li>
+  </ul>
+</div>
