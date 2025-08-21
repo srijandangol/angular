@@ -1,0 +1,52 @@
+<div class="p-6 bg-gray-50 min-h-screen">
+  <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Our Products</h1>
+
+  <div *ngIf="loading$ | async" class="text-center text-lg text-gray-500">
+    Loading products...
+  </div>
+
+  <div *ngIf="error$ | async as error" class="text-center text-red-500 mb-4">
+    Error: {{ error.message || error }}
+  </div>
+
+  <div
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+    *ngIf="(products$ | async) as products"
+  >
+    <div
+      *ngFor="let product of products"
+      class="bg-white rounded-lg shadow-md p-4 flex flex-col items-center hover:shadow-xl transition-shadow duration-300"
+    >
+      <img
+        [src]="product.image"
+        [alt]="product.title"
+        class="w-32 h-32 object-contain mb-4"
+      />
+      <h2 class="text-lg font-semibold text-gray-700 text-center mb-2">{{ product.title }}</h2>
+      <p class="text-gray-900 font-bold mb-4">{{ product.price | currency }}</p>
+      
+      <!-- Show different button based on authentication status -->
+      <div *ngIf="isAuthenticated(); else loginPrompt">
+        <button
+          (click)="addToCart(product)"
+          class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors duration-300"
+        >
+          Add to Cart
+        </button>
+      </div>
+      
+      <!-- Login prompt for unauthenticated users -->
+      <ng-template #loginPrompt>
+        <div class="text-center">
+          <p class="text-sm text-gray-600 mb-2">Login to add to cart</p>
+          <button
+            (click)="addToCart(product)"
+            class="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700 transition-colors duration-300"
+          >
+            Add to Cart
+          </button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>
