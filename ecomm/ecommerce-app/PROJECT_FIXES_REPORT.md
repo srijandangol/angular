@@ -2,7 +2,7 @@
 
 **Project:** Angular Ecommerce App  
 **Date:** August 12, 2025  
-**Developer:** Cascade AI Assistant  
+**Developer:** Srijan Dangol  
 
 ---
 
