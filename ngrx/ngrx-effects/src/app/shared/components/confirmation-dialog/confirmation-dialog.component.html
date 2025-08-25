@@ -1,0 +1,26 @@
+<div class="dialog-container">
+  <div class="dialog-header" [ngClass]="getColorClass()">
+    <mat-icon class="dialog-icon">{{ getIcon() }}</mat-icon>
+    <h2 mat-dialog-title>{{ data.title }}</h2>
+  </div>
+  
+  <div mat-dialog-content class="dialog-content">
+    <p>{{ data.message }}</p>
+  </div>
+  
+  <div mat-dialog-actions class="dialog-actions">
+    <button 
+      mat-button 
+      (click)="onCancel()" 
+      class="cancel-button">
+      {{ data.cancelText }}
+    </button>
+    <button 
+      mat-raised-button 
+      [color]="data.type === 'delete' ? 'warn' : 'primary'"
+      (click)="onConfirm()" 
+      class="confirm-button">
+      {{ data.confirmText }}
+    </button>
+  </div>
+</div>

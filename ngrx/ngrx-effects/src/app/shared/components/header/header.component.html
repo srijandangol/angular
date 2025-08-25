@@ -1,0 +1,43 @@
+<header class="bg-blue-600 text-white p-4">
+  <div class="max-w-7xl mx-auto flex justify-between items-center">
+    <!-- Logo/Brand -->
+    <h1 class="text-2xl font-bold">ShopNow</h1>
+
+    <!-- Navigation -->
+    <nav class="flex space-x-6">
+      <a routerLink="/" class="hover:text-blue-200">Products</a>
+      <a routerLink="/cart" class="hover:text-blue-200">Cart</a>
+    </nav>
+
+    <!-- Right Side: User Auth + Cart -->
+    <div class="flex items-center space-x-4">
+      <!-- User Authentication Section -->
+      <div *ngIf="currentUser$ | async as user; else authButtons" class="flex items-center space-x-3">
+        <span class="text-sm">Welcome, {{ user.email }}</span>
+        <button (click)="logout()" class="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-sm">
+          Logout
+        </button>
+      </div>
+      
+      <!-- Login/Signup buttons when not authenticated -->
+      <ng-template #authButtons>
+        <div class="flex space-x-2">
+          <button (click)="navigateToLogin()" class="bg-green-600 hover:bg-green-700 px-3 py-1 rounded text-sm">
+            Login
+          </button>
+          <button (click)="navigateToSignup()" class="bg-purple-600 hover:bg-purple-700 px-3 py-1 rounded text-sm">
+            Sign Up
+          </button>
+        </div>
+      </ng-template>
+
+      <!-- Cart Info -->
+      <div class="flex items-center space-x-2 border-l border-blue-400 pl-4">
+        <button (click)="navigateToCart()" class="bg-blue-700 hover:bg-blue-800 px-3 py-1 rounded">
+          Cart ({{ (cartItemCount$ | async) || 0 }})
+        </button>
+        <span class="text-sm">Total: ${{ (cartTotalPrice$ | async) || 0 }}</span>
+      </div>
+    </div>
+  </div>
+</header>
